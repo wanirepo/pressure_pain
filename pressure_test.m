@@ -87,6 +87,7 @@ global t r; % pressure device udp channel
 global window_rect prompt lb rb scale_W anchor_y anchor_y2 anchor promptW promptH; % rating scale
 
 %% SETUP: Screen
+if exist('data', 'var'), clear data; end
 bgcolor = 100;
 window_rect = get(0, 'MonitorPositions'); % full screen
 % window_rect = [0 0 1000 600]; % specific size
@@ -259,8 +260,9 @@ try
                     % START: Instruction and rating scale
                     deltat = 0;
                     start_t2 = GetSecs;
+                    delay_thr = max(str2double(dur)/10, .2);
                     
-                    while deltat <= (str2double(dur)+str2double(dur)/10) % collect data for the duration+150ms
+                    while deltat <= (str2double(dur)+delay_thr) % collect data for the duration+150ms
                         deltat = GetSecs - start_t2; % message = fscanf(r);
                         % message = input('test, s:stop, others:continue? ', 's'); % for test
                         rec_i = rec_i+1; % the number of recordings
@@ -284,7 +286,7 @@ try
                         Screen('Flip', theWindow); 
                     end
                 else
-                    WaitSecs(str2double(dur)+str2double(dur)/10);
+                    WaitSecs(str2double(dur)+delay_thr);
                 end
                 
                 message_2 = deblank(fscanf(r));
@@ -460,13 +462,16 @@ try
             
             % HERE: YOU CAN ADD MESSAGES FOR THE NEXT RUN
             if run_i < run_num-1
+                clear Run_end_text;
                 Run_end_text{1} = ['This is the end of the run ' num2str(run_i) '.'];
                 Run_end_text{2} = 'If the participant is ready for the next run, please press Space.';
             elseif run_i == run_num-1
+                clear Run_end_text;
                 Run_end_text{1} = ['This is the end of the run ' num2str(run_i) '. '];
                 Run_end_text{2} = 'The next run is the last run of the experiment.';
                 Run_end_text{3} = 'In the next run, please remove your finger from the device as quickly as possible.';
             else
+                clear Run_end_text;
                 Run_end_text{1} = 'This is the end of the experiment.';
                 Run_end_text{2} = 'To finish the experiment, please press Space.';
             end
@@ -479,7 +484,7 @@ try
             Screen(theWindow,'FillRect',bgcolor, window_rect); 
             
             for jj = 1:numel(Run_end_text)
-                Screen('DrawText',theWindow,Run_end_text{jj},W/2-runtextW/2,H/2+promptH*(jj-1)-150,white); 
+                Screen('DrawText',theWindow,Run_end_text{jj},W/2-runtextW/2,H/2+promptH*(jj-1)-200,white); 
             end
             Screen('Flip', theWindow);
         end
