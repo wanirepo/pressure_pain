@@ -88,15 +88,15 @@ global window_rect prompt lb rb scale_W anchor_y anchor_y2 anchor promptW prompt
 
 %% SETUP: Screen
 bgcolor = 100;
-% window_rect = get(0, 'MonitorPositions'); % full screen
-window_rect = [0 0 1000 600]; % specific size
+window_rect = get(0, 'MonitorPositions'); % full screen
+% window_rect = [0 0 1000 600]; % specific size
 W = window_rect(3); %width of screen
 H = window_rect(4); %height of screen
 font = 'Helvetica';
 fontsize = 24;
 white = 255;
 red = [158 1 66];
-orange = [244 160 120];
+orange = [255 164 0];
 lb = W/4; % rating scale left and right bounds
 rb = (3*W)/4;
 scale_W = (rb-lb).*0.1;
@@ -192,12 +192,12 @@ try
                         eval(['runtextW' num2str(jj) '= Screen(''DrawText'',theWindow,Run_start_text{jj},0,0);']);
                         eval(['runtextW = max(runtextW, runtextW' num2str(jj) ');']);
                     end
-                    Screen(theWindow,'FillRect',bgcolor, window_rect);
                     
+                    Screen(theWindow,'FillRect',bgcolor, window_rect);
                     for jj = 1:numel(Run_start_text)
                         Screen('DrawText',theWindow,Run_start_text{jj},W/2-runtextW/2,H/2+promptH*(jj-1)-150,white);
-                        Screen('Flip', theWindow);
                     end
+                    Screen('Flip', theWindow);
                     
                 end
             end
@@ -480,8 +480,8 @@ try
             
             for jj = 1:numel(Run_end_text)
                 Screen('DrawText',theWindow,Run_end_text{jj},W/2-runtextW/2,H/2+promptH*(jj-1)-150,white); 
-                Screen('Flip', theWindow);
             end
+            Screen('Flip', theWindow);
         end
         
     end % run ends
@@ -655,18 +655,20 @@ for i = 1:numel(exp_scale.inst)
     end
     
     % first: START page
-    while (1) % space
-        [~,~,keyCode] = KbCheck;
-        
-        if keyCode(kbName('space'))==1
-            break
-        elseif keyCode(kbName('q'))==1
-            abort_man;
+    if i == 1
+        while (1) % space
+            [~,~,keyCode] = KbCheck;
+            
+            if keyCode(kbName('space'))==1
+                break
+            elseif keyCode(kbName('q'))==1
+                abort_man;
+            end
+            
+            Screen('DrawText',theWindow, prompt_ex{4},W/2-prompt_ex_W{4}/2, 100, white);
+            Screen('DrawText',theWindow, prompt_ex{5},W/2-prompt_ex_W{5}/2, 150, white);
+            Screen('Flip', theWindow);
         end
-        
-        Screen('DrawText',theWindow, prompt_ex{4},W/2-prompt_ex_W{4}/2, 100, white);
-        Screen('DrawText',theWindow, prompt_ex{5},W/2-prompt_ex_W{5}/2, 150, white);
-        Screen('Flip', theWindow);
     end
     
     % EXPLAIN
@@ -698,9 +700,6 @@ for i = 1:numel(exp_scale.inst)
         
         draw_scale(exp_scale.scale); % draw scale
         Screen('DrawText',theWindow, prompt_ex{2},W/2-prompt_ex_W{2}/2,100,orange);
-        if prompt_n == 1
-            Screen('DrawText',theWindow, prompt_ex{6},W/2-prompt_ex_W{6}/2,150,orange);
-        end
         Screen('DrawText',theWindow, prompt{prompt_n},W/2-promptW/2,H/2-promptH/2-150,white);
         Screen('DrawLine', theWindow, orange, x, H/2, x, H/2+scale_W, 7);
         Screen('Flip', theWindow);
@@ -729,6 +728,9 @@ for i = 1:numel(exp_scale.inst)
             end
             
             Screen('DrawText',theWindow, prompt_ex{3},W/2-prompt_ex_W{3}/2,100,orange);
+            if prompt_n == 1
+                Screen('DrawText',theWindow, prompt_ex{6},W/2-prompt_ex_W{6}/2,150,orange);
+            end
             Screen('Flip', theWindow);
         end
     else
@@ -743,6 +745,11 @@ for i = 1:numel(exp_scale.inst)
             
             Screen('DrawText',theWindow, prompt_ex{7},W/2-prompt_ex_W{7}/2,100,orange);
             Screen('DrawText',theWindow, prompt_ex{8},W/2-prompt_ex_W{8}/2,150,orange);
+            
+            if prompt_n == 1
+                Screen('DrawText',theWindow, prompt_ex{6},W/2-prompt_ex_W{6}/2,300,orange);
+            end
+            
             Screen('Flip', theWindow);
         end
     end
