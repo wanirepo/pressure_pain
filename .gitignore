@@ -4,6 +4,7 @@ bin-debug/
 bin-release/
 *pptx
 *docx
+*m~
 
 # Other files and folders
 .settings/
