@@ -181,24 +181,11 @@ try
                         abort_man;
                     end
                     
-                    % HERE: YOU CAN ADD MESSAGES FOR EACH RUN
-                    if run_i <= run_num
-                        Run_start_text{1} = 'If the participant is ready for starting the run, please press r.';
-                        Run_start_text{2} = ' ';
-                    end
-                    
-                    runtextW = 0;
-                    for jj = 1:numel(Run_start_text)
-                        eval(['runtextW' num2str(jj) '= Screen(''DrawText'',theWindow,Run_start_text{jj},0,0);']);
-                        eval(['runtextW = max(runtextW, runtextW' num2str(jj) ');']);
-                    end
+                    Run_start_text = 'If the participant is ready for starting the run, please press r.';
+                    runtextW = Screen('DrawText',theWindow,Run_start_text,0,0);
                     Screen(theWindow,'FillRect',bgcolor, window_rect);
-                    
-                    for jj = 1:numel(Run_start_text)
-                        Screen('DrawText',theWindow,Run_start_text{jj},W/2-runtextW/2,H/2+promptH*(jj-1)-150,white);
-                        Screen('Flip', theWindow);
-                    end
-                    
+                    Screen('DrawText',theWindow,Run_start_text,W/2-runtextW/2,H/2-promptH/2-150,white);
+                    Screen('Flip', theWindow);
                 end
             end
             
@@ -458,28 +445,27 @@ try
                 abort_man;
             end
             
-            % HERE: YOU CAN ADD MESSAGES FOR THE NEXT RUN
             if run_i < run_num-1
-                Run_end_text{1} = ['This is the end of the run ' num2str(run_i) '.'];
-                Run_end_text{2} = 'If the participant is ready for the next run, please press Space.';
+                Run_text{1} = ['This is the end of the run ' num2str(run_i) '.'];
+                Run_text{2} = 'If the participant is ready for the next run, please press Space.';
             elseif run_i == run_num-1
-                Run_end_text{1} = ['This is the end of the run ' num2str(run_i) '. '];
-                Run_end_text{2} = 'The next run is the last run of the experiment.';
-                Run_end_text{3} = 'In the next run, please remove your finger from the device as quickly as possible.';
+                Run_text{1} = ['This is the end of the run ' num2str(run_i) '. '];
+                Run_text{2} = 'The next run is the last run of the experiment.';
+                Run_text{3} = 'In the next run';
             else
-                Run_end_text{1} = 'This is the end of the experiment.';
-                Run_end_text{2} = 'To finish the experiment, please press Space.';
+                Run_text{1} = 'This is the end of the experiment.';
+                Run_text{2} = 'To finish the experiment, please press Space.';
             end
             
             runtextW = 0;
-            for jj = 1:numel(Run_end_text)
-                eval(['runtextW' num2str(jj) '= Screen(''DrawText'',theWindow,Run_end_text{jj},0,0);']);
+            for jj = 1:numel(Run_text)
+                eval(['runtextW' num2str(jj) '= Screen(''DrawText'',theWindow,Run_text{jj},0,0);']);
                 eval(['runtextW = max(runtextW, runtextW' num2str(jj) ');']);
             end
             Screen(theWindow,'FillRect',bgcolor, window_rect); 
             
-            for jj = 1:numel(Run_end_text)
-                Screen('DrawText',theWindow,Run_end_text{jj},W/2-runtextW/2,H/2+promptH*(jj-1)-150,white); 
+            for jj = 1:numel(Run_text)
+                Screen('DrawText',theWindow,Run_text{jj},W/2-runtextW/2,H/2+promptH*(jj-1)-150,white); 
                 Screen('Flip', theWindow);
             end
         end
