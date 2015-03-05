@@ -88,8 +88,8 @@ global window_rect prompt lb rb scale_W anchor_y anchor_y2 anchor promptW prompt
 
 %% SETUP: Screen
 bgcolor = 100;
-window_rect = get(0, 'MonitorPositions'); % full screen
-% window_rect = [0 0 1000 600]; % specific size
+% window_rect = get(0, 'MonitorPositions'); % full screen
+window_rect = [0 0 1000 600]; % specific size
 W = window_rect(3); %width of screen
 H = window_rect(4); %height of screen
 font = 'Helvetica';
